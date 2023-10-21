@@ -5,6 +5,8 @@ import { RequestJwtPayloadService } from 'src/auth/jwt/services/request/request-
 import { UserService } from 'src/user/core/application/services/user.service';
 import { User } from 'src/user/core/domain/entities/user.entity';
 import { SignPayload } from '../../dtos/sign.dto';
+import { Request } from 'express';
+import { RequestAuthenticatedUserProvider } from './request-authenticated-user-provider.service';
 
 export abstract class CurrentRequestAuthenticatedUserProvider {
     abstract get(): User    
@@ -12,11 +14,10 @@ export abstract class CurrentRequestAuthenticatedUserProvider {
 
 @Injectable({ scope: Scope.REQUEST })
 export class DefaultCurrentRequestAuthenticatedUserProvider implements CurrentRequestAuthenticatedUserProvider {
-    constructor(private readonly userService: UserService,
-        private readonly currentRequestJwtPayloadProvider: CurrentRequestJwtPayloadProvider) { }
+    constructor(@Inject(REQUEST) private readonly request: Request,
+        private readonly requestAuthenticatedUserProvider: RequestAuthenticatedUserProvider) { }
 
     get(): User {
-        const payload = this.currentRequestJwtPayloadProvider.get() as SignPayload;
-        return this.userService.findByEmail(payload.email);
+        return this.requestAuthenticatedUserProvider.get(this.request);
     }
 }

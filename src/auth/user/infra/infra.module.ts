@@ -5,6 +5,9 @@ import { JwtModule } from 'src/auth/jwt';
 import { DefaultSignService, SignService } from './services/sign.service';
 import { DefaultUserSignService, UserSignService } from './services/user-sign.service';
 import { CurrentRequestAuthenticatedUserProvider, DefaultCurrentRequestAuthenticatedUserProvider } from './services/request/current-request-authenticated-user-provider.service';
+import DefaultRequestAuthenticatedUserProvider, { RequestAuthenticatedUserProvider } from './services/request/request-authenticated-user-provider.service';
+import { APP_GUARD } from '@nestjs/core';
+import { UserRoleGuard } from './guards/role.guard';
 
 @Module({
     imports: [
@@ -27,6 +30,14 @@ import { CurrentRequestAuthenticatedUserProvider, DefaultCurrentRequestAuthentic
         {
             provide: CurrentRequestAuthenticatedUserProvider,
             useClass: DefaultCurrentRequestAuthenticatedUserProvider
+        },
+        {
+            provide: RequestAuthenticatedUserProvider,
+            useClass: DefaultRequestAuthenticatedUserProvider
+        },
+        {
+            provide: APP_GUARD,
+            useClass: UserRoleGuard
         }
     ],
     exports: [

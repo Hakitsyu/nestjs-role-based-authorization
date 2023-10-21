@@ -63,7 +63,8 @@ class DefaultJwtOptionsFactory implements JwtOptionsFactory {
     exports: [
         DefaultJwtModule,
         JwtConfigurationProvider,
-        CurrentRequestJwtPayloadProvider
+        RequestJwtPayloadService,
+        CurrentRequestJwtPayloadProvider,
     ]
 })
 export class JwtModule {
