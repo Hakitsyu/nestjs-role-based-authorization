@@ -1,0 +1,5 @@
+auth:
+  jwt:
+    secret: 'hello world'
+    sign:
+      expires_in: '2d'
